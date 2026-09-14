@@ -2,7 +2,7 @@
 
 Native voice dictation and meeting recording for iOS and macOS, with a shared Swift core. Chinese-language workflows are a primary focus.
 
-This is a **sanitized, publicly viewable development repository**. It does not include a hosted backend, API credentials, signing identities, private deployment details, user recordings, or the original private Git history. New installations default to direct API configuration. You must supply your own provider account and implement a secure configuration path for your build; the current connection screen exposes route selection rather than provider credential entry. See the configuration guide.
+This is a **sanitized, open-source development repository**. It does not include a hosted backend, API credentials, signing identities, private deployment details, user recordings, or the original private Git history. New installations default to direct API configuration. You must supply your own provider account and implement a secure configuration path for your build; the current connection screen exposes route selection rather than provider credential entry. See the configuration guide.
 
 ## Features
 
@@ -40,6 +40,6 @@ For device builds, configure your own development team and unique bundle/App Gro
 
 ## License and status
 
-Original application code remains proprietary under [LICENSE](LICENSE); hosting on GitHub does not grant an open-source license. Third-party components retain their own licenses. In particular, the Rime Ice dictionary and its transformation script are GPL-3.0-only; the supplied corresponding-source archive and notices must be retained. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Original application code is licensed under **GNU GPL v3.0 only (GPL-3.0-only)**. You may use, modify and redistribute it, including commercially, under that license. Distribution of covered modified versions must preserve GPL freedoms and provide the required corresponding source. See [LICENSE](LICENSE), [copyright and scope](COPYRIGHT), and the [licensing guide](docs/LICENSING.md). Third-party components retain their own licenses and notices. The GPL-3.0-only Rime Ice resources and their corresponding-source archive remain included; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 This repository is a development snapshot, not an App Store release or a guarantee of cross-app insertion. On iOS, another keyboard cannot provide this app with its document proxy; use the system shortcut clipboard flow and paste manually. Meeting toggle opens the app. Real device microphone, background lifecycle, permissions and insertion must be tested separately.

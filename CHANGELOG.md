@@ -1,5 +1,10 @@
 # Changelog
 
+## Open-source licensing (2026-09-14)
+
+- License original project code, scripts, documentation and original assets under GPL-3.0-only, with third-party licenses retained.
+- Add copyright scope, contribution terms and a licensing guide. This is a licensing/documentation change, not a new binary release.
+
 ## Sanitized baseline (2026-09-14)
 
 Based on application version 0.2.0, iOS build 243 and macOS build 18. This is source publication, not a new binary release.

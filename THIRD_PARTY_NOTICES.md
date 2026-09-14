@@ -1,6 +1,6 @@
 # Third-party notices
 
-Original application code remains proprietary. The following materials are excluded from that proprietary restriction and retain their upstream terms. Attribution is not a claim of endorsement or a blanket clearance for binary distribution.
+Original application code is GPL-3.0-only. The following third-party materials retain their upstream copyright notices and license terms; the project-level grant does not replace them. Attribution is not a claim of endorsement or a blanket clearance for binary distribution.
 
 ## Bundled model
 

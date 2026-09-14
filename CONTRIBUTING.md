@@ -1,6 +1,6 @@
 # Contributing
 
-This is a publicly viewable development repository with proprietary original application code. Access is not a grant to redistribute original code. Discuss changes with the maintainer before substantial work.
+This is an open-source project under GPL-3.0-only. Contributions are welcome; discuss substantial changes with the maintainer early. By submitting a contribution for inclusion, you agree to license your original contribution under GPL-3.0-only. You retain your copyright. Submit only material you have the right to contribute, and identify all third-party licenses separately. No copyright assignment is required.
 
 1. Create a focused branch from `main`.
 2. Keep secrets, private endpoints, user recordings and diagnostic exports out of changes and examples.
