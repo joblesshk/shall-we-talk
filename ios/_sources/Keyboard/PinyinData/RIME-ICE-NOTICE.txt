@@ -1,0 +1,24 @@
+Shall We Talk — rime-ice dictionary attribution
+
+Upstream: iDvel/rime-ice
+https://github.com/iDvel/rime-ice
+Pinned revision: 859e3b5300e0ea01334a627b15db101e94312a75
+Repository license: GNU General Public License version 3 (see RIME-ICE-LICENSE.txt).
+
+Sources: cn_dicts/8105.dict.yaml, cn_dicts/base.dict.yaml, cn_dicts/ext.dict.yaml.
+Upstream file headers identify the component word-list and frequency sources.
+Exact original files are accessible under the pinned revision; pinyin_ice.json records their SHA-256 hashes.
+Unannotated tencent.dict.yaml is not included.
+
+Local transformations: validate annotated readings, deduplicate word/pronunciation pairs,
+retain entries up to 32 characters, preserve the previously shipped 50k vocabulary where upstream lacks a word/reading pair, adjust
+three common-word frequencies for migration compatibility, and compile read-only indexes.
+The reproducible transformation source is ios/tools/build_rime_ice.py in this project.
+The generated manifest records all output hashes and local adjustments.
+
+These notices and the upstream license must accompany redistribution. Product distribution
+must also fulfill the applicable license's source and other requirements; merely including
+this notice is not a determination that all distribution requirements have been met.
+
+Corresponding dictionary source and build script are included in pinyin_ice_sources.zip,
+with offline rebuilding instructions and their GPL-3.0-only license.

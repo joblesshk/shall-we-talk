@@ -1,0 +1,47 @@
+# XcodeGen 配置:安装 xcodegen 后在本目录执行 `xcodegen generate` 生成 .xcodeproj
+# 对外品牌为 Shall We Talk;内部 target/module 保留 VoicePen 以维持签名和工程兼容。
+name: VoicePen
+options:
+  bundleIdPrefix: org.example
+  deploymentTarget:
+    macOS: "14.0"
+packages:
+  ShallWeTalkCore:
+    path: ../core
+targets:
+  VoicePen:
+    type: application
+    platform: macOS
+    sources:
+      - VoicePen
+    dependencies:
+      - package: ShallWeTalkCore
+    info:
+      path: Support/Info.plist
+      properties:
+        CFBundleDisplayName: Shall We Talk
+        CFBundleShortVersionString: "0.2.0"
+        CFBundleVersion: "18"
+        LSUIElement: true # 菜单栏 App,不出现在 Dock
+        NSCalendarsFullAccessUsageDescription: "Shall We Talk 需要访问日历以创建待办日程，并在你完成或删除待办时移除对应日程。"
+        NSMicrophoneUsageDescription: "Shall We Talk 需要使用麦克风录制你的口述内容。"
+        NSSpeechRecognitionUsageDescription: "Shall We Talk 在云端识别不可用时使用设备本机的语音识别兜底；识别全程在本机完成，不会上传。"
+    entitlements:
+      path: Support/VoicePen.entitlements
+      properties:
+        com.apple.security.device.audio-input: true
+        com.apple.developer.icloud-container-identifiers:
+          - iCloud.org.example.voicepen
+        com.apple.developer.ubiquity-container-identifiers:
+          - iCloud.org.example.voicepen
+    settings:
+      base:
+        ENABLE_HARDENED_RUNTIME: YES
+        ENABLE_USER_SCRIPT_SANDBOXING: NO
+        SWIFT_VERSION: "5.9"
+        SWIFT_OBJC_BRIDGING_HEADER: VoicePen/VoicePen-Bridging-Header.h
+        CLANG_ENABLE_OBJC_ARC_EXCEPTIONS: YES
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: YOURTEAMID
+        PRODUCT_NAME: Shall We Talk

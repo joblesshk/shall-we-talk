@@ -1,0 +1,42 @@
+[
+  {
+    "file": "Silero-MIT.txt",
+    "source": "https://raw.githubusercontent.com/snakers4/silero-vad/master/LICENSE",
+    "sha256": "2e63e9a38b6e8fc0c7bc37ce174caca1862870856c6daf5697cfb785e925520b"
+  },
+  {
+    "file": "FluidAudio-Apache-2.0.txt",
+    "source": "https://raw.githubusercontent.com/FluidInference/FluidAudio/main/LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  {
+    "file": "jieba-MIT.txt",
+    "source": "https://raw.githubusercontent.com/fxsjy/jieba/master/LICENSE",
+    "sha256": "18ba0984839f85853b29fadaf992f7dba8fd0ca0fbeae34de2b8735222dc7a37"
+  },
+  {
+    "file": "THUOCL-MIT.txt",
+    "source": "https://raw.githubusercontent.com/thunlp/THUOCL/a30ce79d895d01ab5132a5c74c29703ff7efb4cc/LICENSE",
+    "sha256": "db4b8cca414db4cf487b933d07a0514f77caf44f9f3d392f2bc9d7ba0d511c58"
+  },
+  {
+    "file": "rime-pinyin-simp-Apache-2.0.txt",
+    "source": "https://raw.githubusercontent.com/rime/rime-pinyin-simp/0c6861ef7420ee780270ca6d993d18d4101049d0/LICENSE",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "file": "pypinyin-MIT.txt",
+    "source": "https://raw.githubusercontent.com/mozillazg/python-pinyin/master/LICENSE.txt",
+    "sha256": "1e6c90014b4912815c296ee64bb6f6280af47e6d4c5d80e86232dfc5defe764c"
+  },
+  {
+    "file": "XcodeGen-MIT.txt",
+    "source": "https://raw.githubusercontent.com/yonaskolb/XcodeGen/master/LICENSE",
+    "sha256": "1e210fcab168d549f41a7495d11a7092836bc38c742baa5e21c0883cd0f1d1a1"
+  },
+  {
+    "file": "Pillow-HPND.txt",
+    "source": "https://raw.githubusercontent.com/python-pillow/Pillow/main/LICENSE",
+    "sha256": "15181e7363dca9aed78b79bebebc7fde7f1814b8bd311ea3b87ae8ccadfc185b"
+  }
+]

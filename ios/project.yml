@@ -1,0 +1,221 @@
+# XcodeGen 配置 — iOS 版 Shall We Talk(主 App + 自研原生键盘扩展)
+#
+# 用法(在 ios/ 目录下):
+#   brew install xcodegen        # 只需一次
+#   xcodegen generate            # 生成 VoicePenMobile.xcodeproj
+#   open VoicePenMobile.xcodeproj # 在 Xcode 里选 Team、真机 ⌘R
+#
+# 这份配置替代了 README 里手动建两个 target、配 App Group、改 Info.plist 的 15 步。
+# 键盘为自研 UIKit 原生键盘(不依赖任何三方键盘库)。
+# 改名只需全局替换本文件里的 VoicePen 并重命名 _sources/。
+#
+# 关键约定(与 _sources/ 下手维护的文件保持单一事实源,重生成不会覆盖它们):
+#   - Info.plist 用 INFOPLIST_FILE 直接引用 _sources/*/Info.plist,不用 XcodeGen 的
+#     info: 生成块 —— 避免重生成时把手改的 IsASCIICapable、URL scheme、后台模式打回默认。
+#   - entitlements 用 CODE_SIGN_ENTITLEMENTS 显式指向 _sources/*/*.entitlements。
+#   - App Group `group.org.example.voicepen` 由 App.entitlements / Keyboard.entitlements 声明。
+#
+# 生成后仍需在 Xcode 手动做的事(签名相关,脚本无法代劳):
+#   1. 两个 target 的 Signing → 确认 Team(下方 DEVELOPMENT_TEAM 为当前使用值,可改)
+#   2. App Group `group.org.example.voicepen` 需在开发者账号后台存在
+#      (Automatic 签名会尝试自动创建;个人免费账号如失败,去 Xcode 里手动勾选)
+#   3. iCloud 历史同步(可选,默认开):把主 App 的 CODE_SIGN_ENTITLEMENTS 从
+#      App.entitlements 换成 App.iCloud.entitlements(含 iCloud 容器声明),并在真机首次
+#      运行以注册容器。不想用同步就保持 App.entitlements。
+
+name: VoicePenMobile
+
+options:
+  bundleIdPrefix: org.example
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+# ShallWeTalkCore:iOS/macOS 共用的口述整理服务层(core/),本地 Swift Package 依赖。
+# 只挂主 App target——键盘扩展和 Live Activity 不编译这些文件(见各 target 的 sources 清单)。
+packages:
+  ShallWeTalkCore:
+    path: ../core
+
+schemes:
+  VoicePenMobile:
+    build:
+      targets:
+        VoicePenMobile: all
+    run:
+      config: Debug
+      executable: VoicePenMobile
+    archive:
+      config: Release
+  VoicePenHostAcceptance:
+    build:
+      targets:
+        VoicePenMobile: all
+        VoicePenHost: all
+        VoicePenHostUITests: [test]
+    test:
+      config: Debug
+      targets:
+        - VoicePenHostUITests
+
+targets:
+  # ---------- 主 App ----------
+  # Assets.xcassets 位于 _sources/App 内,由该 source path 自动收录为资源。
+  VoicePenMobile:
+    type: application
+    platform: iOS
+    sources:
+      - path: _sources/App
+      - path: _sources/Shared
+        excludes:
+          - LocalSecrets.swift
+        # LocalSecrets.swift 即使留在本机，也绝不参与编译；测试者自行在设置中配置 token。
+    dependencies:
+      - target: VoicePenKeyboard
+      - target: ShallWeTalkLiveActivity
+      - package: ShallWeTalkCore
+    settings:
+      base:
+        PRODUCT_NAME: Shall We Talk
+        SWIFT_OBJC_BRIDGING_HEADER: _sources/Shared/HostReturnRuntime.h
+        PRODUCT_MODULE_NAME: VoicePenMobile
+        PRODUCT_BUNDLE_IDENTIFIER: org.example.VoicePenMobile
+        DEVELOPMENT_TEAM: YOURTEAMID   # configure your own Apple team;重生成工程时固定使用此 Team
+        SWIFT_VERSION: "5.9"
+        # AudioRecordingIntent 是 iOS 18+ 系统能力；主 App 的最低版本与其对齐，
+        # 避免条件式 SystemIntent conformance 在 Swift 6 中升级为编译错误。
+        IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+        TARGETED_DEVICE_FAMILY: "1"     # iPhone
+        CODE_SIGN_STYLE: Automatic
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: _sources/App/Info.plist
+        # 不设这一条,actool 不会把 AppIcon.appiconset 当成应用图标 ——
+        # 既不注入 CFBundleIcons,也不产出图标 PNG,装机后就是一片空白
+        # (2026-09-02 实测:干净构建的 Info.plist 里根本没有 CFBundleIcons 键)。
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # ⚠️ 签名/能力模式(免费 vs 付费 Apple 账号):
+        #   免费 Apple ID:不支持 App Groups / iCloud → 保持下面这行注释掉。
+        #     后果:语音↔键盘结构化接力 + 词库同源不可用(键盘拼音本地可用不受影响);
+        #     语音文字回填走剪贴板兜底。免费证书 7 天过期,到期重跑 sync_to_iphone.sh 即可。
+        #   付费开发者账号($99/年):启用 App Group;
+        #     2026-07-11 起启用 iCloud 历史同步 → 指向 App.iCloud.entitlements
+        #     (含 App Group + iCloud CloudDocuments + ubiquity 容器 iCloud.org.example.voicepen)。
+        CODE_SIGN_ENTITLEMENTS: _sources/App/App.iCloud.entitlements
+
+  # ---------- 键盘扩展(自研 UIKit 原生键盘) ----------
+  # 键盘需编译 KeyboardBridgeStore(键盘⇄主App桥)+ PendingTextStore(文字接力)
+  # + SharedDictionaryStore(语音词典同源);其余 Shared 文件只属主 App。
+  # 拼音引擎源码在 _sources/Keyboard/Pinyin/、词库资源在 _sources/Keyboard/PinyinData/,
+  # 均随 _sources/Keyboard 目录自动收录(.swift 编译 / .txt、.sqlite、.json 打包为资源)。
+  VoicePenKeyboard:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: _sources/Keyboard
+      - path: _sources/Shared/HostReturnRuntime.m
+      - path: _sources/Shared/HostReturnRuntime.h
+      - path: _sources/Shared/AppGroup.swift
+      - path: _sources/Shared/DarwinBridge.swift
+      - path: _sources/Shared/PendingTextStore.swift
+      - path: _sources/Shared/KeyboardBridgeStore.swift
+      - path: _sources/Shared/SharedDictionaryStore.swift
+      - path: _sources/Shared/DiagLog.swift
+      # 输入框语义路由:iOS 独有(只能由 UITextInputTraits 推导),与其他 Shared 文件同模块。
+      - path: _sources/Shared/HostFieldKind.swift
+      # 插入边界感知:iOS 与 macOS 共用同一份规则,因此实现留在 ShallWeTalkCore。
+      # 键盘不链接该 package(见文件头 §34),这三个文件都是纯 Foundation 逻辑,
+      # 按路径直接编译进键盘模块——比在 Shared/ 里再抄一份安全:`sentenceEnds`
+      # 曾因两处副本漂移出过 bug,单一来源是硬要求。
+      # PromptBuilder 是新增依赖(2026-09-06 回归审查 #3):DictationPolicy.cleanupIsRedundant
+      # 的纠错对参数复用 LearnedCorrection(定义在 PromptBuilder.swift),键盘扩展本身不调用
+      # cleanupIsRedundant,但同一份 DictationPolicy.swift 是单个编译单元,类型必须一起编译进来。
+      - path: ../core/Sources/ShallWeTalkCore/DictationPolicy.swift
+      - path: ../core/Sources/ShallWeTalkCore/InsertionBoundary.swift
+      - path: ../core/Sources/ShallWeTalkCore/PromptBuilder.swift
+      # Quiet Ink 视觉令牌与可复用组件由主 App / 键盘扩展共同编译。
+      - path: _sources/Shared/QuietInkPalette.swift
+      - path: _sources/Shared/QuietInkComponents.swift
+      - path: _sources/Shared/QuietInkAssets.xcassets
+    settings:
+      base:
+        PRODUCT_NAME: Shall We Talk
+        SWIFT_OBJC_BRIDGING_HEADER: _sources/Shared/HostReturnRuntime.h
+        PRODUCT_MODULE_NAME: VoicePenKeyboard
+        PRODUCT_BUNDLE_IDENTIFIER: org.example.VoicePenMobile.VoicePenKeyboard
+        DEVELOPMENT_TEAM: YOURTEAMID   # configure your own Apple team;重生成工程时固定使用此 Team
+        SWIFT_VERSION: "5.9"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: _sources/Keyboard/Info.plist
+        # 免费账号:保持注释(无 App Group)。付费账号:取消注释启用键盘侧 App Group。
+        CODE_SIGN_ENTITLEMENTS: _sources/Keyboard/Keyboard.entitlements
+
+  # ---------- 操作按钮录音 Live Activity / 灵动岛 ----------
+  ShallWeTalkLiveActivity:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: _sources/LiveActivity
+      - path: _sources/Shared/CaptureActivityAttributes.swift
+    settings:
+      base:
+        PRODUCT_NAME: Shall We Talk Live Activity
+        PRODUCT_MODULE_NAME: ShallWeTalkLiveActivity
+        PRODUCT_BUNDLE_IDENTIFIER: org.example.VoicePenMobile.LiveActivity
+        DEVELOPMENT_TEAM: YOURTEAMID
+        SWIFT_VERSION: "5.9"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.2"
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: _sources/LiveActivity/Info.plist
+
+  # ---------- 开发专用真实宿主验收层(不被主 App 依赖，不进入分发包) ----------
+  # 这是独立进程里的真实 UITextField/UITextView，UI 测试必须通过系统第三方
+  # 键盘扩展回填，不直接调用 KeyboardViewController，也不使用 mock text proxy。
+  VoicePenHost:
+    type: application
+    platform: iOS
+    sources:
+      - path: tests/HostApp
+      - path: _sources/Shared/AppGroup.swift
+      - path: _sources/Shared/DarwinBridge.swift
+      - path: _sources/Shared/DiagLog.swift
+      - path: _sources/Shared/PendingTextStore.swift
+      - path: _sources/Shared/KeyboardBridgeStore.swift
+      # 桥快照带 fieldKind 字段,编译 KeyboardBridgeStore 的 target 都要跟着收这个类型。
+      - path: _sources/Shared/HostFieldKind.swift
+    settings:
+      base:
+        PRODUCT_NAME: VoicePen Host Acceptance
+        PRODUCT_MODULE_NAME: VoicePenHost
+        PRODUCT_BUNDLE_IDENTIFIER: org.example.VoicePenHostAcceptance
+        DEVELOPMENT_TEAM: YOURTEAMID
+        SWIFT_VERSION: "5.9"
+        IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_ENTITLEMENTS: tests/HostApp/Host.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: tests/HostApp/Info.plist
+
+  VoicePenHostUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: tests/HostAppUITests
+    dependencies:
+      - target: VoicePenHost
+    settings:
+      base:
+        PRODUCT_NAME: VoicePenHostUITests
+        PRODUCT_BUNDLE_IDENTIFIER: org.example.VoicePenHostAcceptanceUITests
+        DEVELOPMENT_TEAM: YOURTEAMID
+        SWIFT_VERSION: "5.9"
+        IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: VoicePenHost

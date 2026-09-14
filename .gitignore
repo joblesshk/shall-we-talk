@@ -1,0 +1,70 @@
+# macOS / Finder
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode: generated data and per-user state
+DerivedData/
+**/DerivedData/
+*.xcuserstate
+**/xcuserdata/
+**/*.xcuserdatad/
+
+# Swift Package Manager
+.build/
+**/.build/
+.swiftpm/xcode/package.xcworkspace/xcuserdata/
+
+# Generated Xcode project (ios/project.yml is the source of truth)
+ios/VoicePenMobile.xcodeproj/
+
+# Local build and distribution outputs
+build/
+ios/build/
+macos/build/
+*.ipa
+*.dSYM/
+*.xcarchive/
+*.pkg
+*.app
+
+# Logs and transient process state
+*.log
+*.pid
+*.tmp
+*.swp
+*~
+
+# Private local evaluation corpora exported from personal devices
+开发数据/
+
+# Credentials and machine-local configuration
+**/LocalSecrets.swift
+**/LocalSecrets.private.swift
+.env
+.env.*
+!.env.example
+*.p8
+*.pem
+*.key
+*.p12
+*.cer
+*.mobileprovision
+
+# IDE and local agent state
+.idea/
+.vscode/
+.codex/
+.claude/settings.local.json
+.superpowers/**/state/
+
+# Private operational artifacts and sync duplicates
+*.xcdistributionlogs/
+*.shortcut
+*.sarif
+* 2.swift
+* 2.sh
+* 2.md
+**/* [0-9].xcodeproj/
+private/
+publication-audit/

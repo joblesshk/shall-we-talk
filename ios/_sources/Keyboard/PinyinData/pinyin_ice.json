@@ -1,0 +1,53 @@
+{
+  "source": "https://github.com/iDvel/rime-ice",
+  "commit": "859e3b5300e0ea01334a627b15db101e94312a75",
+  "license": "GPL-3.0",
+  "files": [
+    {
+      "path": "cn_dicts/8105.dict.yaml",
+      "sha256": "1f9a42b91dea6982baee2551981780271aeffd78876662b9c9f324e56b37b120"
+    },
+    {
+      "path": "cn_dicts/base.dict.yaml",
+      "sha256": "9d759771544adf196a0adf9092435ba4df4c0c50d7886963b6b54bf59d14775a"
+    },
+    {
+      "path": "cn_dicts/ext.dict.yaml",
+      "sha256": "70ed708720b8d34b1de3f1256859bf7526eedd54b7bad401e600060a465718d8"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    }
+  ],
+  "entries": 891394,
+  "max_word_length": 29,
+  "local_adjustments": {
+    "你好": 500000,
+    "中国": 501000,
+    "升级": 501000
+  },
+  "format": 2,
+  "outputs": [
+    {
+      "file": "pinyin_ice.sqlite",
+      "bytes": 75317248,
+      "sha256": "4da8b57210d5781727dfb6ad9d24f57d5595db0f682dd1a6b9b19485dea77720"
+    },
+    {
+      "file": "pinyin_ice_t9.sqlite",
+      "bytes": 75026432,
+      "sha256": "16eb80ca3e5821ce3837ea0d61cb3ce7ef132f7367986ba9777dbab096f6ffbb"
+    },
+    {
+      "file": "pinyin_ice_initials.sqlite",
+      "bytes": 35188736,
+      "sha256": "dd4bab214bc62fe5fae6f0a14a8a221ea37f39276a7b66978e36d6090b783a35"
+    }
+  ],
+  "legacy_compatibility_entries": 1263,
+  "legacy_sha256": "1391463ee86c162a16770e11ebfec7f274a1bac893aca800423a18c9cb37d192",
+  "materialized_prefix_threshold": 128,
+  "prefix_candidates": 128,
+  "excluded": "Unannotated tencent dictionary; no automatic polyphonic pronunciation guessing."
+}

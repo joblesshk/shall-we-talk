@@ -1,0 +1,27 @@
+* text=auto
+
+*.swift text eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.plist text eol=lf
+*.pbxproj text eol=lf
+*.xcworkspacedata text eol=lf
+*.xcconfig text eol=lf
+*.svg text eol=lf
+*.html text eol=lf
+*.jsx text eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.icns binary
+*.zip binary
+*.wav binary
+*.m4a binary
+
+*.sqlite binary

@@ -1,0 +1,15 @@
+Copyright (c) 2026 Shall We Talk. All rights reserved.
+
+This source code and its associated assets and documentation are proprietary.
+No permission is granted to use, copy, modify, distribute, sublicense, or sell
+any part of this repository without prior written authorization from the
+copyright owner.
+
+Third-party resources retain their respective licenses and are not
+covered by the proprietary restriction above. The Rime Ice dictionary resources
+and ios/tools/build_rime_ice.py are distributed under GPL-3.0-only; see
+ios/THIRD_PARTY_LEXICONS.md and the bundled RIME-ICE-LICENSE.txt.
+
+The bundled Silero VAD model and all other third-party materials are excluded
+from the proprietary grant restrictions above. See THIRD_PARTY_NOTICES.md
+and LICENSES/ for the applicable terms and notices.
