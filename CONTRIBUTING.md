@@ -1,6 +1,6 @@
 # Contributing
 
-This is a private, proprietary development repository. Access is not a grant to redistribute original code. Discuss changes with the maintainer before substantial work.
+This is a publicly viewable development repository with proprietary original application code. Access is not a grant to redistribute original code. Discuss changes with the maintainer before substantial work.
 
 1. Create a focused branch from `main`.
 2. Keep secrets, private endpoints, user recordings and diagnostic exports out of changes and examples.

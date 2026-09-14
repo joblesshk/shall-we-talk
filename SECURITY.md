@@ -2,7 +2,7 @@
 
 ## Reporting
 
-For this private repository, use GitHub private vulnerability reporting when available, or contact the repository owner privately through an existing authorized channel. Do not put credentials, private URLs, user audio or diagnostic exports in public issues. If no private reporting route is available, open an issue containing only a request for secure contact, without exploit details or sensitive data.
+For this repository, use GitHub private vulnerability reporting when available, or contact the repository owner privately through an existing authorized channel. Do not put credentials, private URLs, user audio or diagnostic exports in public issues. If no private reporting route is available, open an issue containing only a request for secure contact, without exploit details or sensitive data.
 
 No response SLA or independently audited security claim is made. The current main branch is the supported development line.
 

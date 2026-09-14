@@ -2,7 +2,7 @@
 
 Native voice dictation and meeting recording for iOS and macOS, with a shared Swift core. Chinese-language workflows are a primary focus.
 
-This is a **sanitized, private development repository**. It does not include a hosted backend, API credentials, signing identities, private deployment details, user recordings, or the original private Git history. New installations default to direct API configuration. You must supply your own provider account and implement a secure configuration path for your build; the current connection screen exposes route selection rather than provider credential entry. See the configuration guide.
+This is a **sanitized, publicly viewable development repository**. It does not include a hosted backend, API credentials, signing identities, private deployment details, user recordings, or the original private Git history. New installations default to direct API configuration. You must supply your own provider account and implement a secure configuration path for your build; the current connection screen exposes route selection rather than provider credential entry. See the configuration guide.
 
 ## Features
 
@@ -14,7 +14,7 @@ This is a **sanitized, private development repository**. It does not include a h
 
 ## Build
 
-Use macOS with full Xcode 26 or newer and XcodeGen (`brew install xcodegen`). The main iOS app targets iOS 18 or newer; the shared package supports iOS 16/macOS 14. Some features require newer OS versions.
+Use macOS with full Xcode 26 or newer and XcodeGen and ripgrep (`brew install xcodegen ripgrep`). The main iOS app targets iOS 18 or newer; the shared package supports iOS 16/macOS 14. Some features require newer OS versions.
 
 ```sh
 git clone https://github.com/joblesshk/shall-we-talk.git

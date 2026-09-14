@@ -18,7 +18,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - run: brew install xcodegen gitleaks
+      - run: brew install xcodegen gitleaks ripgrep
       - run: python3 scripts/check_publication.py
       - run: gitleaks git --redact --no-banner
       - run: ./scripts/verify.sh
